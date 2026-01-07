@@ -9,10 +9,12 @@ class Skill extends Model
 {
     use HasFactory;
 
-   
+    protected $fillable = [
+        'name',
+    ];
 
     public function jobs()
     {
-        return $this->belongsToMany(Job::class); // skill belongs to many jobs , One skill have many jobs
+        return $this->belongsToMany(Job::class, 'skills', 'skill_id', 'job_id');
     }
 }
