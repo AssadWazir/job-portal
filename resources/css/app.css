@@ -1,0 +1,15 @@
+.sidebar .nav-link {
+    font-weight: 500;
+    color: #333;
+    padding: 10px 20px;
+}
+
+.sidebar .nav-link:hover {
+    background-color: #f8f9fa;
+    color: #007bff;
+}
+
+.sidebar .nav-link.active {
+    color: #007bff;
+    background-color: #e9ecef;
+}

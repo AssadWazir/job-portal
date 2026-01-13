@@ -14,51 +14,73 @@ class DatabaseSeeder extends Seeder
 {
     public function run(): void
     {
-        // 1️⃣ Users
-        $admin = User::factory()->create([
+        /*
+         * Create admin user
+         */
+        User::factory()->create([
             'role' => 'admin',
             'email' => 'admin@jobportal.com',
         ]);
 
-        $employers = User::factory(5)->create(['role' => 'employer']);
-        $candidates = User::factory(20)->create(['role' => 'candidate']);
+        /*
+         * Create employers and candidates
+         */
+        $employers = User::factory()->count(5)->create([
+            'role' => 'employer',
+        ]);
 
-        // 2️⃣ Categories
-        $categories = Category::factory(5)->create();
+        $candidates = User::factory()->count(20)->create([
+            'role' => 'candidate',
+        ]);
 
-        // 3️⃣ Skills
-        $skills = Skill::factory(10)->create();
+        /*
+         * Create base data
+         */
+        $categories = Category::factory()->count(5)->create();
+        $skills     = Skill::factory()->count(10)->create();
 
-        // 4️⃣ Companies
-        $companies = $employers->map(fn($user) => Company::factory()->create([
-            'user_id' => $user->id,
-        ]));
+        /*
+         * Create companies for each employer
+         */
+        $companies = [];
 
-        // 5️⃣ Jobs
+        foreach ($employers as $employer) {
+            $companies[] = Company::factory()->create([
+                'user_id' => $employer->id,
+            ]);
+        }
+
+        /*
+         * Create jobs for each company
+         */
         $jobs = collect();
 
         foreach ($companies as $company) {
-            $companyJobs = Job::factory(5)->create([
-                'company_id' => $company->id,
-                'category_id' => $categories->random()->id,
-            ]);
+            $companyJobs = Job::factory()
+                ->count(5)
+                ->create([
+                    'company_id'  => $company->id,
+                    'category_id' => $categories->random()->id,
+                ]);
 
-            // Attach 2–4 random skills for each job
-            $companyJobs->each(fn($job) =>
-                $job->skills()->attach($skills->random(rand(2,4))->pluck('id')->toArray())
-            );
+            foreach ($companyJobs as $job) {
+                $jobSkills = $skills->random(rand(2, 4))->pluck('id')->toArray();
+                $job->skills()->attach($jobSkills);
+            }
 
             $jobs = $jobs->merge($companyJobs);
         }
 
-        // 6️⃣ Applications
+        /*
+         * Create job applications
+         */
         foreach ($candidates as $candidate) {
-            $appliedJobs = $jobs->random(rand(1,3));
+            $selectedJobs = $jobs->random(rand(1, 3));
 
-            foreach ($appliedJobs as $job) {
+            foreach ($selectedJobs as $job) {
                 Application::factory()->create([
                     'user_id' => $candidate->id,
-                    'job_id' => $job->id,
+                    'job_id'  => $job->id,
                 ]);
             }
         }
