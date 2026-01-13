@@ -30,8 +30,7 @@ It was developed to **master complex database relationships, authentication, and
 
 ## 💻 Technical Stack & Concepts Mastered
 
-* **Eloquent Relationships:** Nested relationships like `Application -> Job -> Company` using **Eager Loading** (`with()`) to prevent N+1 query issues.
-* **Many-to-Many:** Implemented **Job-Skill relationships** using pivot tables.
+* **Eloquent Relationships:** 
 * **Security:** **Role-based Middleware** to protect sensitive Admin and Employer routes.
 * **File Storage:** Laravel's **Storage system** for secure PDF resume handling.
 * **UI/UX:** Responsive design using **Bootstrap 5** and **Blade Partials** for a modular, maintainable frontend.
@@ -46,18 +45,18 @@ git clone https://github.com/AssadWazir/job-portal.git
 cd job-portal
 
 
-### 3. Environment Setup
+### 2. Environment Setup
 ```bash
 cp .env.example .env
 php artisan key:generate
 
-### 4. Database & Storage
+### 3. Database & Storage
 php artisan migrate --seed
 php artisan storage:link
 
-### 5. Start the Server
+### 4. Start the Server
 php artisan serve
-
+```
 
 # Learning Disclaimer
 
