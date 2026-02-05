@@ -10,17 +10,13 @@ jobs:
   test:
     runs-on: ubuntu-latest
 
-    strategy:
-      matrix:
-        php-version: ['8.1', '8.2']
-
     steps:
     - uses: actions/checkout@v3
 
     - name: Setup PHP
       uses: shivammathur/setup-php@v2
       with:
-        php-version: ${{ matrix.php-version }}
+        php-version: 8.2
         extensions: mbstring, xml, ctype, iconv, intl, pdo, pdo_sqlite, pdo_mysql
         coverage: xdebug
 
